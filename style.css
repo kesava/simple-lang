@@ -1,1 +1,12 @@
-body{font:100% Helvetica,sans-serif;color:#333}
+body {
+  font: 100% -apple-system, Helvetica, sans-serif;
+  color: #333; }
+
+.editor {
+  border: 1px solid gray;
+  min-height: 20px;
+  margin: 5px;
+  padding: 5px;
+  width: 600px;
+  font-family: 'Courier New', Courier, monospace;
+  font-weight: 600; }
