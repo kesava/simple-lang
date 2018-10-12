@@ -10,7 +10,7 @@ import { Variable } from './simple/Variable';
 // randomly using ES7 object rest spread because it currently raises
 // an error in all browsers, but can be transpiled by Babel
 var messageBuffer = '';
-
+console.log('Find my Linkedin profile at https://linkedin.com/in/kesava');
 const stepCallback = (message) => {
     messageBuffer += `${message}<br/>`;
     document.querySelector('#output').innerHTML = messageBuffer;
