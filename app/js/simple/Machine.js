@@ -1,11 +1,12 @@
 export class Machine {
-    constructor(expression) {
+    constructor(expression, env) {
         this.expression = expression;
+        this.env = env;
     }
 
     step() {
         // console.log(`Before Reducing: ${this.expression}`);
-        this.expression = this.expression.reduce();
+        this.expression = this.expression.reduce(this.env);
         // console.log(`After Reducing: ${this.expression}`);
     }
 

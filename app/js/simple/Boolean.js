@@ -4,7 +4,7 @@ export class Boolean {
     }
 
     toString() {
-        return `« ${this.value} »`;
+        return `(${this.value})`;
     }
 
     get isReducible() {

@@ -7,18 +7,18 @@ export class LessThan {
     }
 
     toString() {
-        return `« ${this.left} < ${this.right} »`;
+        return `(${this.left} < ${this.right})`;
     }
 
     get isReducible() {
         return true;
     }
 
-    reduce() {
+    reduce(env) {
         if (this.left.isReducible) {
-            return new LessThan(this.left.reduce(), this.right);
+            return new LessThan(this.left.reduce(env), this.right);
         } else if (this.right.isReducible) {
-            return new LessThan(this.left, this.right.reduce());
+            return new LessThan(this.left, this.right.reduce(env));
         } else {
             return new Boolean(this.left.val < this.right.val);
         }

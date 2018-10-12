@@ -7,18 +7,18 @@ export class Add {
     }
 
     toString() {
-        return `« ${this.left} + ${this.right} »`;
+        return `(${this.left} + ${this.right})`;
     }
 
     get isReducible() {
         return true;
     }
 
-    reduce() {
+    reduce(env) {
         if (this.left.isReducible) {
-            return new Add(this.left.reduce(), this.right);
+            return new Add(this.left.reduce(env), this.right);
         } else if (this.right.isReducible) {
-            return new Add(this.left, this.right.reduce());
+            return new Add(this.left, this.right.reduce(env));
         } else {
             return new Num(this.left.val + this.right.val);
         }
