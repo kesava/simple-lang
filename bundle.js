@@ -52,9 +52,13 @@
 
 	var _Add = __webpack_require__(4);
 
-	var _Mul = __webpack_require__(5);
+	var _LessThan = __webpack_require__(5);
 
-	var _Machine = __webpack_require__(6);
+	var _Mul = __webpack_require__(7);
+
+	var _Machine = __webpack_require__(8);
+
+	var _Variable = __webpack_require__(9);
 
 	// randomly using ES7 object rest spread because it currently raises
 	// an error in all browsers, but can be transpiled by Babel
@@ -66,9 +70,10 @@
 	};
 
 	var nn = new _Num.Num(50);
-	var n1 = new _Mul.Mul(new _Add.Add(new _Num.Num(3), new _Num.Num(5)), new _Mul.Mul(new _Num.Num(12), new _Add.Add(new _Num.Num(33), new _Num.Num(67))));
-	document.getElementById('editor').innerHTML = n1;
-	var mm = new _Machine.Machine(n1);
+	var n1 = new _LessThan.LessThan(new _Mul.Mul(new _Add.Add(new _Variable.Variable('x'), new _Variable.Variable('y')), new _Mul.Mul(new _Variable.Variable('z'), new _Add.Add(new _Variable.Variable('x'), new _Variable.Variable('y')))), new _Mul.Mul(new _Variable.Variable('x'), new _Mul.Mul(new _Variable.Variable('y'), new _Num.Num(10000))));
+	var env = { x: new _Num.Num(2234), y: new _Num.Num(9), z: new _Num.Num(30) };
+	document.getElementById('editor').innerHTML = JSON.stringify(env) + '<br>' + n1;
+	var mm = new _Machine.Machine(n1, env);
 	mm.run(stepCallback);
 
 /***/ }),
@@ -151,11 +156,11 @@
 	        }
 	    }, {
 	        key: 'reduce',
-	        value: function reduce() {
+	        value: function reduce(env) {
 	            if (this.left.isReducible) {
-	                return new Add(this.left.reduce(), this.right);
+	                return new Add(this.left.reduce(env), this.right);
 	            } else if (this.right.isReducible) {
-	                return new Add(this.left, this.right.reduce());
+	                return new Add(this.left, this.right.reduce(env));
 	            } else {
 	                return new _Num.Num(this.left.val + this.right.val);
 	            }
@@ -172,6 +177,93 @@
 
 /***/ }),
 /* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.LessThan = undefined;
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _Boolean = __webpack_require__(6);
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var LessThan = exports.LessThan = function () {
+	    function LessThan(left, right) {
+	        _classCallCheck(this, LessThan);
+
+	        this.left = left;
+	        this.right = right;
+	    }
+
+	    _createClass(LessThan, [{
+	        key: 'toString',
+	        value: function toString() {
+	            return '(' + this.left + ' < ' + this.right + ')';
+	        }
+	    }, {
+	        key: 'reduce',
+	        value: function reduce(env) {
+	            if (this.left.isReducible) {
+	                return new LessThan(this.left.reduce(env), this.right);
+	            } else if (this.right.isReducible) {
+	                return new LessThan(this.left, this.right.reduce(env));
+	            } else {
+	                return new _Boolean.Boolean(this.left.val < this.right.val);
+	            }
+	        }
+	    }, {
+	        key: 'isReducible',
+	        get: function get() {
+	            return true;
+	        }
+	    }]);
+
+	    return LessThan;
+	}();
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var Boolean = exports.Boolean = function () {
+	    function Boolean(value) {
+	        _classCallCheck(this, Boolean);
+
+	        this.value = value;
+	    }
+
+	    _createClass(Boolean, [{
+	        key: "toString",
+	        value: function toString() {
+	            return "(" + this.value + ")";
+	        }
+	    }, {
+	        key: "isReducible",
+	        get: function get() {
+	            return false;
+	        }
+	    }]);
+
+	    return Boolean;
+	}();
+
+/***/ }),
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -202,11 +294,11 @@
 	        }
 	    }, {
 	        key: 'reduce',
-	        value: function reduce() {
+	        value: function reduce(env) {
 	            if (this.left.isReducible) {
-	                return new Mul(this.left.reduce(), this.right);
+	                return new Mul(this.left.reduce(env), this.right);
 	            } else if (this.right.isReducible) {
-	                return new Mul(this.left, this.right.reduce());
+	                return new Mul(this.left, this.right.reduce(env));
 	            } else {
 	                return new _Num.Num(this.left.val * this.right.val);
 	            }
@@ -222,7 +314,7 @@
 	}();
 
 /***/ }),
-/* 6 */
+/* 8 */
 /***/ (function(module, exports) {
 
 	"use strict";
@@ -236,17 +328,18 @@
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	var Machine = exports.Machine = function () {
-	    function Machine(expression) {
+	    function Machine(expression, env) {
 	        _classCallCheck(this, Machine);
 
 	        this.expression = expression;
+	        this.env = env;
 	    }
 
 	    _createClass(Machine, [{
 	        key: "step",
 	        value: function step() {
 	            // console.log(`Before Reducing: ${this.expression}`);
-	            this.expression = this.expression.reduce();
+	            this.expression = this.expression.reduce(this.env);
 	            // console.log(`After Reducing: ${this.expression}`);
 	        }
 	    }, {
@@ -263,6 +356,47 @@
 	    }]);
 
 	    return Machine;
+	}();
+
+/***/ }),
+/* 9 */
+/***/ (function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var Variable = exports.Variable = function () {
+	    function Variable(name) {
+	        _classCallCheck(this, Variable);
+
+	        this.name = name;
+	    }
+
+	    _createClass(Variable, [{
+	        key: "toString",
+	        value: function toString() {
+	            return "" + this.name;
+	        }
+	    }, {
+	        key: "reduce",
+	        value: function reduce(env) {
+	            return env[this.name];
+	        }
+	    }, {
+	        key: "isReducible",
+	        get: function get() {
+	            return true;
+	        }
+	    }]);
+
+	    return Variable;
 	}();
 
 /***/ })
