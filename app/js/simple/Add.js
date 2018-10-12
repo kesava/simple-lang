@@ -7,7 +7,7 @@ export class Add {
     }
 
     toString() {
-        return `<< ${this.left} + ${this.right} >>`;
+        return `« ${this.left} + ${this.right} »`;
     }
 
     get isReducible() {

@@ -7,7 +7,7 @@ export class Mul {
     }
 
     toString() {
-        return `<< ${this.left} * ${this.right} >>`;
+        return `« ${this.left} * ${this.right} »`;
     }
 
     get isReducible() {

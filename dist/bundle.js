@@ -147,7 +147,7 @@
 	    _createClass(Add, [{
 	        key: 'toString',
 	        value: function toString() {
-	            return '<< ' + this.left + ' + ' + this.right + ' >>';
+	            return '« ' + this.left + ' + ' + this.right + ' »';
 	        }
 	    }, {
 	        key: 'reduce',
@@ -198,7 +198,7 @@
 	    _createClass(Mul, [{
 	        key: 'toString',
 	        value: function toString() {
-	            return '<< ' + this.left + ' * ' + this.right + ' >>';
+	            return '« ' + this.left + ' * ' + this.right + ' »';
 	        }
 	    }, {
 	        key: 'reduce',
