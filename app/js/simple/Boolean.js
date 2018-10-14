@@ -7,6 +7,10 @@ export class Boolean {
         return `(${this.value})`;
     }
 
+    get val() {
+        return this.value;
+    }
+
     get isReducible() {
         return false;
     }
