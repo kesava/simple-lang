@@ -29,7 +29,7 @@ const n3Cond = new LessThan(new Num(9), new Num(2));
 const n3 = new Assign('z', new IfExpression(n3Cond, new Add(new Num(1000), new Num(729)), new Add(new Num(99), new Num(22))));
 
 const env = { x: new Num(2234), y: new Num(9), z: new Num(30) };
-document.getElementById('editor').innerHTML = `${JSON.stringify(env)}<br>${n1}<br><br>${n2}<br><br>${n3}`;
+document.getElementById('editor').innerHTML = `Initial Environment variables: ${JSON.stringify(env)}<br><br>${n1}<br><br>${n2}<br><br>${n3}`;
 
 const mm = new Machine(n1, env);
 mm.run(stepCallback);

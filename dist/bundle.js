@@ -86,7 +86,7 @@
 	var n3 = new _Assign.Assign('z', new _IfExpression.IfExpression(n3Cond, new _Add.Add(new _Num.Num(1000), new _Num.Num(729)), new _Add.Add(new _Num.Num(99), new _Num.Num(22))));
 
 	var env = { x: new _Num.Num(2234), y: new _Num.Num(9), z: new _Num.Num(30) };
-	document.getElementById('editor').innerHTML = JSON.stringify(env) + '<br>' + n1 + '<br><br>' + n2 + '<br><br>' + n3;
+	document.getElementById('editor').innerHTML = 'Initial Environment variables: ' + JSON.stringify(env) + '<br><br>' + n1 + '<br><br>' + n2 + '<br><br>' + n3;
 
 	var mm = new _Machine.Machine(n1, env);
 	mm.run(stepCallback);
@@ -380,7 +380,7 @@
 	            }
 	            console.log(String(this.expression));
 	            stepCallback(String(this.expression));
-	            stepCallback("------------<br>End state of Environment: " + JSON.stringify(this.env) + "<br>------------");
+	            stepCallback("------------<br>Environment variables after execution: " + JSON.stringify(this.env) + "<br>------------");
 	        }
 	    }]);
 

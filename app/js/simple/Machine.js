@@ -20,6 +20,6 @@ export class Machine {
         }
         console.log(String(this.expression));
         stepCallback(String(this.expression));
-        stepCallback(`------------<br>End state of Environment: ${JSON.stringify(this.env)}<br>------------`);
+        stepCallback(`------------<br>Environment variables after execution: ${JSON.stringify(this.env)}<br>------------`);
     }
 }
