@@ -4,7 +4,7 @@ export class DoNothing {
     }
 
     toString() {
-        return "DoNothing";
+        return "EndOfExecution";
     }
 
     get isReducible() {
