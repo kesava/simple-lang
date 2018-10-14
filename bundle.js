@@ -501,7 +501,7 @@
 	    _createClass(DoNothing, [{
 	        key: "toString",
 	        value: function toString() {
-	            return "DoNothing";
+	            return "EndOfExecution";
 	        }
 	    }, {
 	        key: "isReducible",
