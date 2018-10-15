@@ -440,7 +440,7 @@
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _DoNothing = __webpack_require__(11);
+	var _NoOp = __webpack_require__(11);
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -465,7 +465,7 @@
 	            } else {
 	                var result = {};
 	                result[this.name] = this.expression;
-	                return { expression: new _DoNothing.DoNothing(), env: Object.assign(env, result) };
+	                return { expression: new _NoOp.NoOp(), env: Object.assign(env, result) };
 	            }
 	        }
 	    }, {
@@ -492,12 +492,12 @@
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	var DoNothing = exports.DoNothing = function () {
-	    function DoNothing() {
-	        _classCallCheck(this, DoNothing);
+	var NoOp = exports.NoOp = function () {
+	    function NoOp() {
+	        _classCallCheck(this, NoOp);
 	    }
 
-	    _createClass(DoNothing, [{
+	    _createClass(NoOp, [{
 	        key: "toString",
 	        value: function toString() {
 	            return "EndOfExecution";
@@ -509,7 +509,7 @@
 	        }
 	    }]);
 
-	    return DoNothing;
+	    return NoOp;
 	}();
 
 /***/ }),
@@ -635,7 +635,7 @@
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _DoNothing = __webpack_require__(11);
+	var _NoOp = __webpack_require__(11);
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -659,9 +659,9 @@
 	                var reducedEnv = this.first.reduce(env);
 	                return { expression: new Sequence(reducedEnv.expression, this.second), env: reducedEnv.env };
 	            } else if (this.second && this.second.isReducible) {
-	                return { expression: new Sequence(this.second, new _DoNothing.DoNothing()), env: env };
+	                return { expression: new Sequence(this.second, new _NoOp.NoOp()), env: env };
 	            } else {
-	                return { expression: new _DoNothing.DoNothing(), env: env };
+	                return { expression: new _NoOp.NoOp(), env: env };
 	            }
 	        }
 	    }, {
@@ -689,7 +689,7 @@
 
 	var _IfStatement = __webpack_require__(12);
 
-	var _DoNothing = __webpack_require__(11);
+	var _NoOp = __webpack_require__(11);
 
 	var _Sequence = __webpack_require__(14);
 
@@ -711,7 +711,7 @@
 	    }, {
 	        key: 'reduce',
 	        value: function reduce(env) {
-	            return { expression: new _IfStatement.IfStatement(this.condition, new _Sequence.Sequence(this.sequence, new WhileStatement(this.condition, this.sequence)), new _DoNothing.DoNothing()), env: env };
+	            return { expression: new _IfStatement.IfStatement(this.condition, new _Sequence.Sequence(this.sequence, new WhileStatement(this.condition, this.sequence)), new _NoOp.NoOp()), env: env };
 	        }
 	    }, {
 	        key: 'isReducible',
