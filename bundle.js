@@ -66,7 +66,7 @@
 
 	var _IfExpression = __webpack_require__(13);
 
-	var _DoNothing = __webpack_require__(11);
+	var _Sequence = __webpack_require__(14);
 
 	// randomly using ES7 object rest spread because it currently raises
 	// an error in all browsers, but can be transpiled by Babel
@@ -88,14 +88,8 @@
 	var env = { x: new _Num.Num(2234), y: new _Num.Num(9), z: new _Num.Num(30) };
 	document.getElementById('editor').innerHTML = 'Initial Environment variables: ' + JSON.stringify(env) + '<br><br>' + n1 + '<br><br>' + n2 + '<br><br>' + n3;
 
-	var mm = new _Machine.Machine(n1, env);
-	mm.run(stepCallback);
-
-	var mm1 = new _Machine.Machine(n2, env);
-	mm1.run(stepCallback);
-
-	var mm2 = new _Machine.Machine(n3, env);
-	mm2.run(stepCallback);
+	var seq = new _Machine.Machine(new _Sequence.Sequence(n1, new _Sequence.Sequence(n2, n3)), env);
+	seq.run(stepCallback);
 
 /***/ }),
 /* 1 */
@@ -621,6 +615,58 @@
 	    }]);
 
 	    return IfExpression;
+	}();
+
+/***/ }),
+/* 14 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.Sequence = undefined;
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _DoNothing = __webpack_require__(11);
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var Sequence = exports.Sequence = function () {
+	    function Sequence(first, second) {
+	        _classCallCheck(this, Sequence);
+
+	        this.first = first;
+	        this.second = second;
+	    }
+
+	    _createClass(Sequence, [{
+	        key: "toString",
+	        value: function toString() {
+	            return this.first + "<br/>";
+	        }
+	    }, {
+	        key: "reduce",
+	        value: function reduce(env) {
+	            if (this.first && this.first.isReducible) {
+	                var reducedEnv = this.first.reduce(env);
+	                return { expression: new Sequence(reducedEnv.expression, this.second), env: reducedEnv.env };
+	            } else if (this.second && this.second.isReducible) {
+	                return { expression: new Sequence(this.second, new _DoNothing.DoNothing()), env: env };
+	            } else {
+	                return { expression: new _DoNothing.DoNothing(), env: env };
+	            }
+	        }
+	    }, {
+	        key: "isReducible",
+	        get: function get() {
+	            return true;
+	        }
+	    }]);
+
+	    return Sequence;
 	}();
 
 /***/ })
