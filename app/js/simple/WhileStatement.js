@@ -13,7 +13,7 @@ export class WhileStatement {
     }
 
     toString() {
-        return `while (${this.condition}) {
+        return `while ${this.condition} {
             ${this.sequence}
         }`;
     }

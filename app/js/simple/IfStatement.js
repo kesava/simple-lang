@@ -9,7 +9,7 @@ export class IfStatement {
         const alt = (this.alternative.isReducible) ? `else { 
             ${this.alternative}
         }` : '';
-        return `if (${this.condition}) {
+        return `if ${this.condition} {
             ${this.consequence}
         } ${alt}`;
     }

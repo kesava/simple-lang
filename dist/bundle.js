@@ -70,6 +70,10 @@
 
 	var _WhileStatement = __webpack_require__(15);
 
+	var _GreaterThan = __webpack_require__(16);
+
+	var _And = __webpack_require__(19);
+
 	// randomly using ES7 object rest spread because it currently raises
 	// an error in all browsers, but can be transpiled by Babel
 	var messageBuffer = '';
@@ -84,10 +88,10 @@
 	var n2Cond = new _LessThan.LessThan(new _Add.Add(new _Variable.Variable('x'), new _Num.Num(5)), new _Num.Num(9));
 	var n2 = new _IfStatement.IfStatement(n2Cond, new _Assign.Assign('r', new _Num.Num(42)), new _Assign.Assign('t', new _Num.Num(22)));
 
-	var n3Cond = new _LessThan.LessThan(new _Num.Num(9), new _Num.Num(2));
+	var n3Cond = new _GreaterThan.GreaterThan(new _Variable.Variable('y'), new _Num.Num(2));
 	var n3 = new _Assign.Assign('z', new _IfExpression.IfExpression(n3Cond, new _Add.Add(new _Num.Num(1000), new _Num.Num(729)), new _Add.Add(new _Num.Num(99), new _Num.Num(22))));
 
-	var n4Cond = new _LessThan.LessThan(new _Variable.Variable('y'), new _Num.Num(20));
+	var n4Cond = new _And.And(new _LessThan.LessThan(new _Variable.Variable('y'), new _Num.Num(20)), new _GreaterThan.GreaterThan(new _Variable.Variable('y'), new _Num.Num(6)));
 	var n4 = new _WhileStatement.WhileStatement(n4Cond, new _Assign.Assign(new _Variable.Variable('y'), new _Add.Add(new _Variable.Variable('y'), new _Num.Num(4))));
 
 	var env = { x: new _Num.Num(2234), y: new _Num.Num(9), z: new _Num.Num(30) };
@@ -539,7 +543,7 @@
 	        key: 'toString',
 	        value: function toString() {
 	            var alt = this.alternative.isReducible ? 'else { \n            ' + this.alternative + '\n        }' : '';
-	            return 'if (' + this.condition + ') {\n            ' + this.consequence + '\n        } ' + alt;
+	            return 'if ' + this.condition + ' {\n            ' + this.consequence + '\n        } ' + alt;
 	        }
 	    }, {
 	        key: 'reduce',
@@ -594,7 +598,7 @@
 	        key: 'toString',
 	        value: function toString() {
 	            var alt = this.alternative.isReducible ? 'else { \n            ' + this.alternative + '\n        }' : '';
-	            return 'ifExpr (' + this.condition + ') {\n            ' + this.consequence + '\n        } ' + alt;
+	            return 'ifExpr ' + this.condition + ' {\n            ' + this.consequence + '\n        } ' + alt;
 	        }
 	    }, {
 	        key: 'reduce',
@@ -706,7 +710,7 @@
 	    _createClass(WhileStatement, [{
 	        key: 'toString',
 	        value: function toString() {
-	            return 'while (' + this.condition + ') {\n            ' + this.sequence + '\n        }';
+	            return 'while ' + this.condition + ' {\n            ' + this.sequence + '\n        }';
 	        }
 	    }, {
 	        key: 'reduce',
@@ -721,6 +725,215 @@
 	    }]);
 
 	    return WhileStatement;
+	}();
+
+/***/ }),
+/* 16 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.GreaterThan = undefined;
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _LessThan = __webpack_require__(5);
+
+	var _EqualTo = __webpack_require__(17);
+
+	var _Compliment = __webpack_require__(18);
+
+	var _And = __webpack_require__(19);
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var GreaterThan = exports.GreaterThan = function () {
+	    function GreaterThan(left, right) {
+	        _classCallCheck(this, GreaterThan);
+
+	        this.left = left;
+	        this.right = right;
+	    }
+
+	    _createClass(GreaterThan, [{
+	        key: 'toString',
+	        value: function toString() {
+	            return '(' + this.left + ' > ' + this.right + ')';
+	        }
+	    }, {
+	        key: 'reduce',
+	        value: function reduce(env) {
+	            return new _Compliment.Compliment(new _And.And(new _LessThan.LessThan(this.left, this.right), new _EqualTo.EqualTo(this.left, this.right)));
+	        }
+	    }, {
+	        key: 'isReducible',
+	        get: function get() {
+	            return true;
+	        }
+	    }]);
+
+	    return GreaterThan;
+	}();
+
+/***/ }),
+/* 17 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.EqualTo = undefined;
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _Boolean = __webpack_require__(6);
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var EqualTo = exports.EqualTo = function () {
+	    function EqualTo(left, right) {
+	        _classCallCheck(this, EqualTo);
+
+	        this.left = left;
+	        this.right = right;
+	    }
+
+	    _createClass(EqualTo, [{
+	        key: 'toString',
+	        value: function toString() {
+	            return '(' + this.left + ' == ' + this.right + ')';
+	        }
+	    }, {
+	        key: 'reduce',
+	        value: function reduce(env) {
+	            if (this.left.isReducible) {
+	                return new EqualTo(this.left.reduce(env), this.right);
+	            } else if (this.right.isReducible) {
+	                return new EqualTo(this.left, this.right.reduce(env));
+	            } else {
+	                return new _Boolean.Boolean(this.left.val === this.right.val);
+	            }
+	        }
+	    }, {
+	        key: 'isReducible',
+	        get: function get() {
+	            return true;
+	        }
+	    }]);
+
+	    return EqualTo;
+	}();
+
+/***/ }),
+/* 18 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.Compliment = undefined;
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _Boolean = __webpack_require__(6);
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var Compliment = exports.Compliment = function () {
+	    function Compliment(expression) {
+	        _classCallCheck(this, Compliment);
+
+	        this.expression = expression;
+	    }
+
+	    _createClass(Compliment, [{
+	        key: 'toString',
+	        value: function toString() {
+	            return '(!' + this.expression + ')';
+	        }
+	    }, {
+	        key: 'reduce',
+	        value: function reduce(env) {
+	            if (this.expression.isReducible) {
+	                return new Compliment(this.expression.reduce(env));
+	            } else {
+	                switch (this.expression.val) {
+	                    case true:
+	                        return new _Boolean.Boolean(false);
+	                        break;
+
+	                    case false:
+	                        return new _Boolean.Boolean(true);
+	                        break;
+	                }
+	            }
+	        }
+	    }, {
+	        key: 'isReducible',
+	        get: function get() {
+	            return true;
+	        }
+	    }]);
+
+	    return Compliment;
+	}();
+
+/***/ }),
+/* 19 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.And = undefined;
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _Boolean = __webpack_require__(6);
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var And = exports.And = function () {
+	    function And(left, right) {
+	        _classCallCheck(this, And);
+
+	        this.left = left;
+	        this.right = right;
+	    }
+
+	    _createClass(And, [{
+	        key: 'toString',
+	        value: function toString() {
+	            return '(' + this.left + ' && ' + this.right + ')';
+	        }
+	    }, {
+	        key: 'reduce',
+	        value: function reduce(env) {
+	            if (this.left.isReducible) {
+	                return new And(this.left.reduce(env), this.right);
+	            } else if (this.right.isReducible) {
+	                return new And(this.left, this.right.reduce(env));
+	            } else {
+	                return new _Boolean.Boolean(this.left.val && this.right.val);
+	            }
+	        }
+	    }, {
+	        key: 'isReducible',
+	        get: function get() {
+	            return true;
+	        }
+	    }]);
+
+	    return And;
 	}();
 
 /***/ })
