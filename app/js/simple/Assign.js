@@ -1,4 +1,4 @@
-import { DoNothing } from "./DoNothing";
+import { NoOp } from "./NoOp";
 
 export class Assign {
     constructor(name, expression) {
@@ -20,7 +20,7 @@ export class Assign {
         } else {
             const result = {};
             result[this.name] = this.expression;
-            return {expression: new DoNothing(), env: Object.assign(env, result)};
+            return {expression: new NoOp(), env: Object.assign(env, result)};
         }
     }
 }

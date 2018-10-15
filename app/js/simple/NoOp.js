@@ -1,4 +1,4 @@
-export class DoNothing {
+export class NoOp {
     constructor() {
 
     }

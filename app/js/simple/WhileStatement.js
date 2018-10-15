@@ -1,5 +1,5 @@
 import { IfStatement } from './IfStatement';
-import { DoNothing } from './DoNothing';
+import { NoOp } from './NoOp';
 import { Sequence } from './Sequence';
 
 export class WhileStatement {
@@ -19,7 +19,7 @@ export class WhileStatement {
     }
 
     reduce(env) {
-        return { expression: new IfStatement(this.condition, new Sequence(this.sequence, new WhileStatement(this.condition, this.sequence)), new DoNothing()), env}
+        return { expression: new IfStatement(this.condition, new Sequence(this.sequence, new WhileStatement(this.condition, this.sequence)), new NoOp()), env}
     }
     
 }

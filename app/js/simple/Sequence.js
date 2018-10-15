@@ -1,4 +1,4 @@
-import { DoNothing } from "./DoNothing";
+import { NoOp } from "./NoOp";
 
 export class Sequence {
     constructor(first, second) {
@@ -19,9 +19,9 @@ export class Sequence {
             const reducedEnv = this.first.reduce(env);
             return { expression: new Sequence(reducedEnv.expression, this.second), env: reducedEnv.env};
         } else if (this.second && this.second.isReducible) {
-            return { expression: new Sequence(this.second, new DoNothing()), env };
+            return { expression: new Sequence(this.second, new NoOp()), env };
         }  else {
-            return { expression: new DoNothing(), env };
+            return { expression: new NoOp(), env };
         }
     }
 }
