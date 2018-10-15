@@ -68,6 +68,8 @@
 
 	var _Sequence = __webpack_require__(14);
 
+	var _WhileStatement = __webpack_require__(15);
+
 	// randomly using ES7 object rest spread because it currently raises
 	// an error in all browsers, but can be transpiled by Babel
 	var messageBuffer = '';
@@ -85,10 +87,13 @@
 	var n3Cond = new _LessThan.LessThan(new _Num.Num(9), new _Num.Num(2));
 	var n3 = new _Assign.Assign('z', new _IfExpression.IfExpression(n3Cond, new _Add.Add(new _Num.Num(1000), new _Num.Num(729)), new _Add.Add(new _Num.Num(99), new _Num.Num(22))));
 
-	var env = { x: new _Num.Num(2234), y: new _Num.Num(9), z: new _Num.Num(30) };
-	document.getElementById('editor').innerHTML = 'Initial Environment variables: ' + JSON.stringify(env) + '<br><br>' + n1 + '<br><br>' + n2 + '<br><br>' + n3;
+	var n4Cond = new _LessThan.LessThan(new _Variable.Variable('y'), new _Num.Num(20));
+	var n4 = new _WhileStatement.WhileStatement(n4Cond, new _Assign.Assign(new _Variable.Variable('y'), new _Add.Add(new _Variable.Variable('y'), new _Num.Num(4))));
 
-	var seq = new _Machine.Machine(new _Sequence.Sequence(n1, new _Sequence.Sequence(n2, n3)), env);
+	var env = { x: new _Num.Num(2234), y: new _Num.Num(9), z: new _Num.Num(30) };
+	document.getElementById('editor').innerHTML = '------------<br>Initial values of variables: <br/>' + JSON.stringify(env) + '<br>------------<br><br>' + n1 + '<br><br>' + n2 + '<br><br>' + n3 + '<br><br>' + n4;
+
+	var seq = new _Machine.Machine(new _Sequence.Sequence(n1, new _Sequence.Sequence(n2, new _Sequence.Sequence(n3, n4))), env);
 	seq.run(stepCallback);
 
 /***/ }),
@@ -374,7 +379,7 @@
 	            }
 	            console.log(String(this.expression));
 	            stepCallback(String(this.expression));
-	            stepCallback("------------<br>Environment variables after execution: " + JSON.stringify(this.env) + "<br>------------");
+	            stepCallback("------------<br>Variable values after execution:<br/> " + JSON.stringify(this.env) + "<br>------------");
 	        }
 	    }]);
 
@@ -645,7 +650,7 @@
 	    _createClass(Sequence, [{
 	        key: "toString",
 	        value: function toString() {
-	            return this.first + "<br/>";
+	            return "" + this.first;
 	        }
 	    }, {
 	        key: "reduce",
@@ -667,6 +672,55 @@
 	    }]);
 
 	    return Sequence;
+	}();
+
+/***/ }),
+/* 15 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.WhileStatement = undefined;
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _IfStatement = __webpack_require__(12);
+
+	var _DoNothing = __webpack_require__(11);
+
+	var _Sequence = __webpack_require__(14);
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var WhileStatement = exports.WhileStatement = function () {
+	    function WhileStatement(condition, sequence) {
+	        _classCallCheck(this, WhileStatement);
+
+	        this.condition = condition;
+	        this.sequence = sequence;
+	    }
+
+	    _createClass(WhileStatement, [{
+	        key: 'toString',
+	        value: function toString() {
+	            return 'while (' + this.condition + ') {\n            ' + this.sequence + '\n        }';
+	        }
+	    }, {
+	        key: 'reduce',
+	        value: function reduce(env) {
+	            return { expression: new _IfStatement.IfStatement(this.condition, new _Sequence.Sequence(this.sequence, new WhileStatement(this.condition, this.sequence)), new _DoNothing.DoNothing()), env: env };
+	        }
+	    }, {
+	        key: 'isReducible',
+	        get: function get() {
+	            return true;
+	        }
+	    }]);
+
+	    return WhileStatement;
 	}();
 
 /***/ })
