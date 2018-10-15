@@ -9,7 +9,7 @@ import { Variable } from './simple/Variable';
 import { Assign } from './simple/Assign';
 import { IfStatement } from './simple/IfStatement';
 import { IfExpression } from './simple/IfExpression';
-import { DoNothing } from './simple/DoNothing';
+import { Sequence } from './simple/Sequence';
 
 // randomly using ES7 object rest spread because it currently raises
 // an error in all browsers, but can be transpiled by Babel
@@ -31,12 +31,5 @@ const n3 = new Assign('z', new IfExpression(n3Cond, new Add(new Num(1000), new N
 const env = { x: new Num(2234), y: new Num(9), z: new Num(30) };
 document.getElementById('editor').innerHTML = `Initial Environment variables: ${JSON.stringify(env)}<br><br>${n1}<br><br>${n2}<br><br>${n3}`;
 
-const mm = new Machine(n1, env);
-mm.run(stepCallback);
-
-const mm1 = new Machine(n2, env);
-mm1.run(stepCallback);
-
-const mm2 = new Machine(n3, env);
-mm2.run(stepCallback);
-
+const seq = new Machine(new Sequence(n1, new Sequence(n2, n3)), env);
+seq.run(stepCallback);
