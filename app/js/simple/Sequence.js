@@ -7,7 +7,7 @@ export class Sequence {
     }
 
     toString() {
-        return `${this.first}<br/>`;
+        return `${this.first}`;
     }
 
     get isReducible() {
